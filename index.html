@@ -234,6 +234,14 @@
       margin-bottom: 1rem;
     }
 
+    .photo-box-container {
+      background: #f1f5f9;
+      padding: 0.85rem;
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      margin-bottom: 1rem;
+    }
+
     label {
       display: block;
       font-weight: 600;
@@ -249,9 +257,9 @@
       font-size: 1rem;
     }
 
-    #photoPreview {
+    .photo-preview {
       width: 100%;
-      max-height: 250px;
+      max-height: 200px;
       object-fit: cover;
       border-radius: 8px;
       display: none;
@@ -421,6 +429,7 @@
       background: #fee2e2;
     }
 
+    /* MODAL DE ZOOM AVEC LES 3 PHOTOS */
     .modal {
       display: none;
       position: fixed;
@@ -429,27 +438,47 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
+      background-color: rgba(0, 0, 0, 0.88);
       align-items: center;
       justify-content: center;
       padding: 1rem;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     .modal-content-container {
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 1rem;
       max-width: 95%;
-      max-height: 90vh;
+      margin: auto;
     }
 
-    .modal img {
+    .modal-images-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
       max-width: 100%;
-      max-height: 70vh;
+    }
+
+    .modal-images-row img {
+      max-width: 30vw;
+      max-height: 60vh;
       border-radius: 8px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       object-fit: contain;
+    }
+
+    @media (max-width: 768px) {
+      .modal-images-row {
+        flex-direction: column;
+      }
+      .modal-images-row img {
+        max-width: 90vw;
+        max-height: 35vh;
+      }
     }
 
     .modal-notes {
@@ -457,7 +486,6 @@
       background: rgba(15, 23, 42, 0.8);
       padding: 0.75rem 1rem;
       border-radius: 8px;
-      margin-top: 1rem;
       max-width: 500px;
       text-align: center;
       font-size: 0.95rem;
@@ -524,9 +552,13 @@
         color: #64748b;
         margin-bottom: 8px;
       }
-      .print-card img {
-        width: 100%;
-        height: 180px;
+      .print-photos-flex {
+        display: flex;
+        gap: 6px;
+      }
+      .print-photos-flex img {
+        flex: 1;
+        height: 120px;
         object-fit: cover;
         border-radius: 6px;
         border: 1px solid #e2e8f0;
@@ -590,16 +622,45 @@
         <input type="text" id="numeroCommande" name="no_autofill_cmd" autocomplete="off">
       </div>
 
-      <div class="form-group">
-        <label>Photo du colis / préparation</label>
-        <img id="photoPreview" alt="Aperçu photo">
+      <!-- PHOTO 1 -->
+      <div class="photo-box-container">
+        <label>📸 Photo 1 (Obligatoire)</label>
+        <img id="photoPreview1" class="photo-preview" alt="Aperçu Photo 1">
         
-        <input type="file" id="fileGallery" accept="image/*" style="display: none;">
-        <input type="file" id="fileCamera" accept="image/*" capture="environment" style="display: none;">
+        <input type="file" id="fileGallery1" accept="image/*" style="display: none;">
+        <input type="file" id="fileCamera1" accept="image/*" capture="environment" style="display: none;">
         
         <div class="camera-controls">
-          <button type="button" class="btn-secondary" id="btnGalerie">📁 Galerie</button>
-          <button type="button" class="btn-secondary" id="btnPhotoDirecte">📸 Photo</button>
+          <button type="button" class="btn-secondary" id="btnGalerie1">📁 Galerie 1</button>
+          <button type="button" class="btn-secondary" id="btnPhotoDirecte1">📸 Photo 1</button>
+        </div>
+      </div>
+
+      <!-- PHOTO 2 -->
+      <div class="photo-box-container">
+        <label>📸 Photo 2 (Optionnelle)</label>
+        <img id="photoPreview2" class="photo-preview" alt="Aperçu Photo 2">
+        
+        <input type="file" id="fileGallery2" accept="image/*" style="display: none;">
+        <input type="file" id="fileCamera2" accept="image/*" capture="environment" style="display: none;">
+        
+        <div class="camera-controls">
+          <button type="button" class="btn-secondary" id="btnGalerie2">📁 Galerie 2</button>
+          <button type="button" class="btn-secondary" id="btnPhotoDirecte2">📸 Photo 2</button>
+        </div>
+      </div>
+
+      <!-- PHOTO 3 -->
+      <div class="photo-box-container">
+        <label>📸 Photo 3 (Optionnelle)</label>
+        <img id="photoPreview3" class="photo-preview" alt="Aperçu Photo 3">
+        
+        <input type="file" id="fileGallery3" accept="image/*" style="display: none;">
+        <input type="file" id="fileCamera3" accept="image/*" capture="environment" style="display: none;">
+        
+        <div class="camera-controls">
+          <button type="button" class="btn-secondary" id="btnGalerie3">📁 Galerie 3</button>
+          <button type="button" class="btn-secondary" id="btnPhotoDirecte3">📸 Photo 3</button>
         </div>
       </div>
 
@@ -634,11 +695,15 @@
 
   <div id="print-area"></div>
 
-  <!-- MODAL ZOOM PHOTO -->
+  <!-- MODAL ZOOM AVEC LES 3 PHOTOS -->
   <div id="imageModal" class="modal">
     <span class="modal-close" id="closeModal">&times;</span>
     <div class="modal-content-container">
-      <img id="modalImg" src="" alt="Zoom photo">
+      <div class="modal-images-row">
+        <img id="modalImg1" src="" alt="Zoom photo 1">
+        <img id="modalImg2" src="" alt="Zoom photo 2" style="display:none;">
+        <img id="modalImg3" src="" alt="Zoom photo 3" style="display:none;">
+      </div>
       <div id="modalNotes" class="modal-notes" style="display: none;"></div>
     </div>
   </div>
@@ -695,19 +760,35 @@
     });
 
     let commandes = [];
-    let imageCaptureeData = "";
+    let imageCaptureeData1 = "";
+    let imageCaptureeData2 = "";
+    let imageCaptureeData3 = "";
     let modeEditionId = null;
 
     const inputNumero = document.getElementById('numeroCommande');
     const inputNotes = document.getElementById('notes');
-    const photoPreview = document.getElementById('photoPreview');
     
-    const fileGallery = document.getElementById('fileGallery');
-    const fileCamera = document.getElementById('fileCamera');
-    
-    const btnGalerie = document.getElementById('btnGalerie');
-    const btnPhotoDirecte = document.getElementById('btnPhotoDirecte');
-    
+    // PHOTO 1
+    const photoPreview1 = document.getElementById('photoPreview1');
+    const fileGallery1 = document.getElementById('fileGallery1');
+    const fileCamera1 = document.getElementById('fileCamera1');
+    const btnGalerie1 = document.getElementById('btnGalerie1');
+    const btnPhotoDirecte1 = document.getElementById('btnPhotoDirecte1');
+
+    // PHOTO 2
+    const photoPreview2 = document.getElementById('photoPreview2');
+    const fileGallery2 = document.getElementById('fileGallery2');
+    const fileCamera2 = document.getElementById('fileCamera2');
+    const btnGalerie2 = document.getElementById('btnGalerie2');
+    const btnPhotoDirecte2 = document.getElementById('btnPhotoDirecte2');
+
+    // PHOTO 3
+    const photoPreview3 = document.getElementById('photoPreview3');
+    const fileGallery3 = document.getElementById('fileGallery3');
+    const fileCamera3 = document.getElementById('fileCamera3');
+    const btnGalerie3 = document.getElementById('btnGalerie3');
+    const btnPhotoDirecte3 = document.getElementById('btnPhotoDirecte3');
+
     const btnEnregistrer = document.getElementById('btnEnregistrer');
     const btnAnnulerEdit = document.getElementById('btnAnnulerEdit');
     const formTitle = document.getElementById('formTitle');
@@ -719,7 +800,9 @@
     const dateFiltreExport = document.getElementById('dateFiltreExport');
 
     const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImg');
+    const modalImg1 = document.getElementById('modalImg1');
+    const modalImg2 = document.getElementById('modalImg2');
+    const modalImg3 = document.getElementById('modalImg3');
     const modalNotes = document.getElementById('modalNotes');
     const closeModal = document.getElementById('closeModal');
 
@@ -735,17 +818,17 @@
       }
       afficherGalerie(inputRecherche.value);
     }, (error) => {
-      alert("Erreur de lecture Firebase : " + error.message + "\nAssurez-vous que les Règles sont bien 'true'.");
+      alert("Erreur de lecture Firebase : " + error.message);
     });
 
-    // COMPRESSION ÉQUILIBRÉE (IMAGE NETTE ET COMPATIBLE FIREBASE)
+    // COMPRESSION ÉQUILIBRÉE
     function compresserImage(dataUrl, callback) {
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
         let width = img.width;
         let height = img.height;
-        const maxDimension = 1200; // Taille max augmentée à 1200px pour garder du détail
+        const maxDimension = 1200;
 
         if (width > height && width > maxDimension) {
           height *= maxDimension / width;
@@ -759,38 +842,80 @@
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
-        callback(canvas.toDataURL('image/jpeg', 0.75)); // Qualité réglée à 75%
+        callback(canvas.toDataURL('image/jpeg', 0.75));
       };
       img.src = dataUrl;
     }
 
-    btnGalerie.addEventListener('click', () => fileGallery.click());
-    btnPhotoDirecte.addEventListener('click', () => fileCamera.click());
+    // HANDLERS PHOTO 1
+    btnGalerie1.addEventListener('click', () => fileGallery1.click());
+    btnPhotoDirecte1.addEventListener('click', () => fileCamera1.click());
 
-    function chargerFichier(e) {
+    function chargerFichier1(e) {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (event) => {
           compresserImage(event.target.result, (imageCompressée) => {
-            imageCaptureeData = imageCompressée;
-            photoPreview.src = imageCaptureeData;
-            photoPreview.style.display = 'block';
+            imageCaptureeData1 = imageCompressée;
+            photoPreview1.src = imageCaptureeData1;
+            photoPreview1.style.display = 'block';
           });
         };
         reader.readAsDataURL(file);
       }
     }
+    fileGallery1.addEventListener('change', chargerFichier1);
+    fileCamera1.addEventListener('change', chargerFichier1);
 
-    fileGallery.addEventListener('change', chargerFichier);
-    fileCamera.addEventListener('change', chargerFichier);
+    // HANDLERS PHOTO 2
+    btnGalerie2.addEventListener('click', () => fileGallery2.click());
+    btnPhotoDirecte2.addEventListener('click', () => fileCamera2.click());
+
+    function chargerFichier2(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          compresserImage(event.target.result, (imageCompressée) => {
+            imageCaptureeData2 = imageCompressée;
+            photoPreview2.src = imageCaptureeData2;
+            photoPreview2.style.display = 'block';
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    fileGallery2.addEventListener('change', chargerFichier2);
+    fileCamera2.addEventListener('change', chargerFichier2);
+
+    // HANDLERS PHOTO 3
+    btnGalerie3.addEventListener('click', () => fileGallery3.click());
+    btnPhotoDirecte3.addEventListener('click', () => fileCamera3.click());
+
+    function chargerFichier3(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          compresserImage(event.target.result, (imageCompressée) => {
+            imageCaptureeData3 = imageCompressée;
+            photoPreview3.src = imageCaptureeData3;
+            photoPreview3.style.display = 'block';
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    fileGallery3.addEventListener('change', chargerFichier3);
+    fileCamera3.addEventListener('change', chargerFichier3);
 
     btnEnregistrer.addEventListener('click', () => {
       const numero = inputNumero.value.trim();
       const notes = inputNotes.value.trim();
 
-      if (!numero || !imageCaptureeData) {
-        alert("Veuillez renseigner un numéro et ajouter une photo.");
+      if (!numero || !imageCaptureeData1) {
+        alert("Veuillez renseigner un numéro de commande et au moins la Photo 1.");
         return;
       }
 
@@ -801,7 +926,9 @@
       const commandeData = {
         id: idObjet,
         numero: numero,
-        photo: imageCaptureeData,
+        photo: imageCaptureeData1, // Photo 1 (obligatoire)
+        photo2: imageCaptureeData2, // Photo 2 (optionnelle)
+        photo3: imageCaptureeData3, // Photo 3 (optionnelle)
         notes: notes,
         date: modeEditionId !== null ? commandes.find(c => c.id === modeEditionId).date : new Date().toLocaleString('fr-FR')
       };
@@ -815,18 +942,26 @@
         .catch((error) => {
           btnEnregistrer.disabled = false;
           btnEnregistrer.textContent = "Enregistrer la préparation";
-          alert("❌ ÉCHEC FIREBASE : " + error.message + "\nVérifiez vos règles dans la console Firebase.");
+          alert("❌ ÉCHEC FIREBASE : " + error.message);
         });
     });
 
     function reinitialiserFormulaire() {
       modeEditionId = null;
       inputNumero.value = "";
-      imageCaptureeData = "";
-      photoPreview.style.display = 'none';
+      imageCaptureeData1 = "";
+      imageCaptureeData2 = "";
+      imageCaptureeData3 = "";
+      photoPreview1.style.display = 'none';
+      photoPreview2.style.display = 'none';
+      photoPreview3.style.display = 'none';
       inputNotes.value = "";
-      fileGallery.value = "";
-      fileCamera.value = "";
+      fileGallery1.value = "";
+      fileCamera1.value = "";
+      fileGallery2.value = "";
+      fileCamera2.value = "";
+      fileGallery3.value = "";
+      fileCamera3.value = "";
       btnEnregistrer.textContent = "Enregistrer la préparation";
       btnEnregistrer.disabled = false;
       btnAnnulerEdit.style.display = "none";
@@ -846,10 +981,31 @@
       modeEditionId = id;
       inputNumero.value = item.numero;
       inputNotes.value = item.notes || "";
-      imageCaptureeData = item.photo;
       
-      photoPreview.src = item.photo;
-      photoPreview.style.display = 'block';
+      imageCaptureeData1 = item.photo || "";
+      imageCaptureeData2 = item.photo2 || "";
+      imageCaptureeData3 = item.photo3 || "";
+      
+      if (imageCaptureeData1) {
+        photoPreview1.src = imageCaptureeData1;
+        photoPreview1.style.display = 'block';
+      } else {
+        photoPreview1.style.display = 'none';
+      }
+
+      if (imageCaptureeData2) {
+        photoPreview2.src = imageCaptureeData2;
+        photoPreview2.style.display = 'block';
+      } else {
+        photoPreview2.style.display = 'none';
+      }
+
+      if (imageCaptureeData3) {
+        photoPreview3.src = imageCaptureeData3;
+        photoPreview3.style.display = 'block';
+      } else {
+        photoPreview3.style.display = 'none';
+      }
 
       btnEnregistrer.textContent = "💾 Sauvegarder les modifications";
       btnAnnulerEdit.style.display = "inline-block";
@@ -893,10 +1049,17 @@
       liste.forEach(cmd => {
         const item = document.createElement('div');
         item.className = 'commande-item-compact';
-        item.onclick = () => ouvrirModal(cmd.photo, cmd.notes);
+        item.onclick = () => ouvrirModal(cmd.photo, cmd.photo2, cmd.photo3, cmd.notes);
+        
+        let count = 1;
+        if (cmd.photo2) count++;
+        if (cmd.photo3) count++;
+        
+        const nbPhotosText = count > 1 ? `📷 (${count} photos)` : `📷 (1 photo)`;
+
         item.innerHTML = `
           <div class="commande-main-btn">
-            <span>📷</span>
+            <span>${nbPhotosText}</span>
             <div>
               <div class="commande-num-badge">${cmd.numero}</div>
               <div class="commande-date-compact">${cmd.date}</div>
@@ -911,9 +1074,25 @@
       });
     }
 
-    window.ouvrirModal = function(src, notes) {
+    window.ouvrirModal = function(src1, src2, src3, notes) {
       modal.style.display = "flex";
-      modalImg.src = src;
+      
+      modalImg1.src = src1 || "";
+      
+      if (src2) {
+        modalImg2.src = src2;
+        modalImg2.style.display = "block";
+      } else {
+        modalImg2.style.display = "none";
+      }
+
+      if (src3) {
+        modalImg3.src = src3;
+        modalImg3.style.display = "block";
+      } else {
+        modalImg3.style.display = "none";
+      }
+
       if (notes && notes.trim() !== "") {
         modalNotes.textContent = "💬 " + notes;
         modalNotes.style.display = "block";
@@ -980,7 +1159,11 @@
           <div class="print-card">
             <h3>Commande : ${cmd.numero}</h3>
             <div class="date">Date : ${cmd.date}</div>
-            <img src="${cmd.photo}" alt="Preuve commande ${cmd.numero}">
+            <div class="print-photos-flex">
+              <img src="${cmd.photo}" alt="Preuve 1 commande ${cmd.numero}">
+              ${cmd.photo2 ? `<img src="${cmd.photo2}" alt="Preuve 2 commande ${cmd.numero}">` : ''}
+              ${cmd.photo3 ? `<img src="${cmd.photo3}" alt="Preuve 3 commande ${cmd.numero}">` : ''}
+            </div>
             ${cmd.notes ? `<div class="notes">💬 ${cmd.notes}</div>` : ''}
           </div>
         `;
