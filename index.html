@@ -429,7 +429,7 @@
       background: #fee2e2;
     }
 
-    /* MODAL DE ZOOM AVEC LES 3 PHOTOS */
+    /* MODAL DE ZOOM AVEC LES 2 PHOTOS */
     .modal {
       display: none;
       position: fixed;
@@ -457,27 +457,27 @@
 
     .modal-images-row {
       display: flex;
-      gap: 0.75rem;
+      gap: 1rem;
       flex-wrap: wrap;
       justify-content: center;
       max-width: 100%;
     }
 
     .modal-images-row img {
-      max-width: 30vw;
-      max-height: 60vh;
+      max-width: 45vw;
+      max-height: 65vh;
       border-radius: 8px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       object-fit: contain;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .modal-images-row {
         flex-direction: column;
       }
       .modal-images-row img {
         max-width: 90vw;
-        max-height: 35vh;
+        max-height: 40vh;
       }
     }
 
@@ -554,11 +554,11 @@
       }
       .print-photos-flex {
         display: flex;
-        gap: 6px;
+        gap: 8px;
       }
       .print-photos-flex img {
-        flex: 1;
-        height: 120px;
+        width: 50%;
+        height: 140px;
         object-fit: cover;
         border-radius: 6px;
         border: 1px solid #e2e8f0;
@@ -624,7 +624,7 @@
 
       <!-- PHOTO 1 -->
       <div class="photo-box-container">
-        <label>📸 Photo 1 (Obligatoire)</label>
+        <label>📸 Photo 1 (Ex: Contenu du colis)</label>
         <img id="photoPreview1" class="photo-preview" alt="Aperçu Photo 1">
         
         <input type="file" id="fileGallery1" accept="image/*" style="display: none;">
@@ -638,7 +638,7 @@
 
       <!-- PHOTO 2 -->
       <div class="photo-box-container">
-        <label>📸 Photo 2 (Optionnelle)</label>
+        <label>📸 Photo 2 (Ex: Colis fermé / Étiquette) - Optionnelle</label>
         <img id="photoPreview2" class="photo-preview" alt="Aperçu Photo 2">
         
         <input type="file" id="fileGallery2" accept="image/*" style="display: none;">
@@ -647,20 +647,6 @@
         <div class="camera-controls">
           <button type="button" class="btn-secondary" id="btnGalerie2">📁 Galerie 2</button>
           <button type="button" class="btn-secondary" id="btnPhotoDirecte2">📸 Photo 2</button>
-        </div>
-      </div>
-
-      <!-- PHOTO 3 -->
-      <div class="photo-box-container">
-        <label>📸 Photo 3 (Optionnelle)</label>
-        <img id="photoPreview3" class="photo-preview" alt="Aperçu Photo 3">
-        
-        <input type="file" id="fileGallery3" accept="image/*" style="display: none;">
-        <input type="file" id="fileCamera3" accept="image/*" capture="environment" style="display: none;">
-        
-        <div class="camera-controls">
-          <button type="button" class="btn-secondary" id="btnGalerie3">📁 Galerie 3</button>
-          <button type="button" class="btn-secondary" id="btnPhotoDirecte3">📸 Photo 3</button>
         </div>
       </div>
 
@@ -695,14 +681,13 @@
 
   <div id="print-area"></div>
 
-  <!-- MODAL ZOOM AVEC LES 3 PHOTOS -->
+  <!-- MODAL ZOOM AVEC LES 2 PHOTOS -->
   <div id="imageModal" class="modal">
     <span class="modal-close" id="closeModal">&times;</span>
     <div class="modal-content-container">
       <div class="modal-images-row">
         <img id="modalImg1" src="" alt="Zoom photo 1">
         <img id="modalImg2" src="" alt="Zoom photo 2" style="display:none;">
-        <img id="modalImg3" src="" alt="Zoom photo 3" style="display:none;">
       </div>
       <div id="modalNotes" class="modal-notes" style="display: none;"></div>
     </div>
@@ -762,32 +747,24 @@
     let commandes = [];
     let imageCaptureeData1 = "";
     let imageCaptureeData2 = "";
-    let imageCaptureeData3 = "";
     let modeEditionId = null;
 
     const inputNumero = document.getElementById('numeroCommande');
     const inputNotes = document.getElementById('notes');
     
-    // PHOTO 1
+    // PHOTO 1 ELEMENTS
     const photoPreview1 = document.getElementById('photoPreview1');
     const fileGallery1 = document.getElementById('fileGallery1');
     const fileCamera1 = document.getElementById('fileCamera1');
     const btnGalerie1 = document.getElementById('btnGalerie1');
     const btnPhotoDirecte1 = document.getElementById('btnPhotoDirecte1');
 
-    // PHOTO 2
+    // PHOTO 2 ELEMENTS
     const photoPreview2 = document.getElementById('photoPreview2');
     const fileGallery2 = document.getElementById('fileGallery2');
     const fileCamera2 = document.getElementById('fileCamera2');
     const btnGalerie2 = document.getElementById('btnGalerie2');
     const btnPhotoDirecte2 = document.getElementById('btnPhotoDirecte2');
-
-    // PHOTO 3
-    const photoPreview3 = document.getElementById('photoPreview3');
-    const fileGallery3 = document.getElementById('fileGallery3');
-    const fileCamera3 = document.getElementById('fileCamera3');
-    const btnGalerie3 = document.getElementById('btnGalerie3');
-    const btnPhotoDirecte3 = document.getElementById('btnPhotoDirecte3');
 
     const btnEnregistrer = document.getElementById('btnEnregistrer');
     const btnAnnulerEdit = document.getElementById('btnAnnulerEdit');
@@ -802,7 +779,6 @@
     const modal = document.getElementById('imageModal');
     const modalImg1 = document.getElementById('modalImg1');
     const modalImg2 = document.getElementById('modalImg2');
-    const modalImg3 = document.getElementById('modalImg3');
     const modalNotes = document.getElementById('modalNotes');
     const closeModal = document.getElementById('closeModal');
 
@@ -889,27 +865,6 @@
     fileGallery2.addEventListener('change', chargerFichier2);
     fileCamera2.addEventListener('change', chargerFichier2);
 
-    // HANDLERS PHOTO 3
-    btnGalerie3.addEventListener('click', () => fileGallery3.click());
-    btnPhotoDirecte3.addEventListener('click', () => fileCamera3.click());
-
-    function chargerFichier3(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          compresserImage(event.target.result, (imageCompressée) => {
-            imageCaptureeData3 = imageCompressée;
-            photoPreview3.src = imageCaptureeData3;
-            photoPreview3.style.display = 'block';
-          });
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-    fileGallery3.addEventListener('change', chargerFichier3);
-    fileCamera3.addEventListener('change', chargerFichier3);
-
     btnEnregistrer.addEventListener('click', () => {
       const numero = inputNumero.value.trim();
       const notes = inputNotes.value.trim();
@@ -926,9 +881,8 @@
       const commandeData = {
         id: idObjet,
         numero: numero,
-        photo: imageCaptureeData1, // Photo 1 (obligatoire)
-        photo2: imageCaptureeData2, // Photo 2 (optionnelle)
-        photo3: imageCaptureeData3, // Photo 3 (optionnelle)
+        photo: imageCaptureeData1, // Compatibilité rétroactive (Photo 1)
+        photo2: imageCaptureeData2, // Deuxième photo optionnelle
         notes: notes,
         date: modeEditionId !== null ? commandes.find(c => c.id === modeEditionId).date : new Date().toLocaleString('fr-FR')
       };
@@ -951,17 +905,13 @@
       inputNumero.value = "";
       imageCaptureeData1 = "";
       imageCaptureeData2 = "";
-      imageCaptureeData3 = "";
       photoPreview1.style.display = 'none';
       photoPreview2.style.display = 'none';
-      photoPreview3.style.display = 'none';
       inputNotes.value = "";
       fileGallery1.value = "";
       fileCamera1.value = "";
       fileGallery2.value = "";
       fileCamera2.value = "";
-      fileGallery3.value = "";
-      fileCamera3.value = "";
       btnEnregistrer.textContent = "Enregistrer la préparation";
       btnEnregistrer.disabled = false;
       btnAnnulerEdit.style.display = "none";
@@ -984,7 +934,6 @@
       
       imageCaptureeData1 = item.photo || "";
       imageCaptureeData2 = item.photo2 || "";
-      imageCaptureeData3 = item.photo3 || "";
       
       if (imageCaptureeData1) {
         photoPreview1.src = imageCaptureeData1;
@@ -998,13 +947,6 @@
         photoPreview2.style.display = 'block';
       } else {
         photoPreview2.style.display = 'none';
-      }
-
-      if (imageCaptureeData3) {
-        photoPreview3.src = imageCaptureeData3;
-        photoPreview3.style.display = 'block';
-      } else {
-        photoPreview3.style.display = 'none';
       }
 
       btnEnregistrer.textContent = "💾 Sauvegarder les modifications";
@@ -1049,13 +991,9 @@
       liste.forEach(cmd => {
         const item = document.createElement('div');
         item.className = 'commande-item-compact';
-        item.onclick = () => ouvrirModal(cmd.photo, cmd.photo2, cmd.photo3, cmd.notes);
+        item.onclick = () => ouvrirModal(cmd.photo, cmd.photo2, cmd.notes);
         
-        let count = 1;
-        if (cmd.photo2) count++;
-        if (cmd.photo3) count++;
-        
-        const nbPhotosText = count > 1 ? `📷 (${count} photos)` : `📷 (1 photo)`;
+        const nbPhotosText = cmd.photo2 ? "📷📷 (2 photos)" : "📷 (1 photo)";
 
         item.innerHTML = `
           <div class="commande-main-btn">
@@ -1074,7 +1012,7 @@
       });
     }
 
-    window.ouvrirModal = function(src1, src2, src3, notes) {
+    window.ouvrirModal = function(src1, src2, notes) {
       modal.style.display = "flex";
       
       modalImg1.src = src1 || "";
@@ -1084,13 +1022,6 @@
         modalImg2.style.display = "block";
       } else {
         modalImg2.style.display = "none";
-      }
-
-      if (src3) {
-        modalImg3.src = src3;
-        modalImg3.style.display = "block";
-      } else {
-        modalImg3.style.display = "none";
       }
 
       if (notes && notes.trim() !== "") {
@@ -1162,7 +1093,6 @@
             <div class="print-photos-flex">
               <img src="${cmd.photo}" alt="Preuve 1 commande ${cmd.numero}">
               ${cmd.photo2 ? `<img src="${cmd.photo2}" alt="Preuve 2 commande ${cmd.numero}">` : ''}
-              ${cmd.photo3 ? `<img src="${cmd.photo3}" alt="Preuve 3 commande ${cmd.numero}">` : ''}
             </div>
             ${cmd.notes ? `<div class="notes">💬 ${cmd.notes}</div>` : ''}
           </div>
