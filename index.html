@@ -1129,7 +1129,7 @@
 
       if (dateSelect) {
         const parts = dateSelect.split('-');
-        const dateFormatee = `${parts[2]}/${parts[1]}/${parts0]}`;
+        const dateFormatee = `${parts[2]}/${parts[1]}/${parts[0]}`;
         
         listeAExporter = commandes.filter(cmd => cmd.date.startsWith(dateFormatee));
         titreExport = `Historique des Preuves - Date : ${dateFormatee}`;
